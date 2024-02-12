@@ -18,11 +18,28 @@ export const getById = (id: string) => {
 
 export const create = (user: User) => {
   return new Promise((resolve, reject) => {
-    const newUser: User = { id: uuidv4(), ...user };
+    const newUser: any = { id: uuidv4(), ...user };
     users.push(newUser);
-    writeDataToFile("./src/users.json", user);
+    writeDataToFile("./src/users.json", users);
     resolve(newUser);
   });
 };
 
-export default { getAll, getById, create };
+export const update = (id: string, user: User) => {
+  return new Promise((resolve, reject) => {
+    const index = users.findIndex((u: User) => u.id === id);
+    users[index] = { id, ...user };
+    writeDataToFile("./src/users.json", users);
+    resolve(user);
+  });
+};
+
+export const remove = (id: string) => {
+  return new Promise((resolve, reject) => {
+    const filteredUsers = users.filter((u) => u.id !== id)
+    writeDataToFile("./src/users.json", filteredUsers);
+    resolve(filteredUsers);
+  });
+};
+
+export default { getAll, getById, create, update, remove };
